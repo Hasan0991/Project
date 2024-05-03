@@ -41,6 +41,11 @@ class Surgery : public Doctor{
 public:
     Surgery(str name,str time_table) : Doctor(name,"Surgery",time_table) {}
 
+    void treat() const override{
+        std::cout<<"Srgery works"<<std::endl;
+    }
+
+
 };
 
 
