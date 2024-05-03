@@ -32,7 +32,6 @@ class Doctor{
 public:
     str name;
     str field;
-    str illness_care;
     str time_table;
 public:
     Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
@@ -68,8 +67,17 @@ class Illness_Types{
     str field;
 public:
     Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
-};
 
+    bool has_illness(str illness){
+        for(int i=0;i<illness_types.size();i++){
+            if(illness_types[i]==illness){
+                return true;
+            }
+        }
+        return false;
+    }
+};
+//so i have patient who has illness and in order to find appropriate doctot i need to create a function which will look through that illness in vector of illness
 class Hospital{
     std::vector<Doctor*> doctors;
     std::vector<Illness_Types> illnes_types;
@@ -80,6 +88,16 @@ public:
     void add_field(Illness_Types illness_type){
         illnes_types.push_back(illness_type);
     }
+    void appointment(Patient* patient){
+        for(Doctor* D:doctors){
+            for(int i=0;i<illnes_types.size();i++) {
+                if(i)
+            }
+        }
+
+    }
+
+
 
 
 };
