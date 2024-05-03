@@ -102,6 +102,11 @@ public:
         }
         std::cout<<"there are no doctors who can help you"<<std::endl;
     }
+    ~Hospital(){
+        for(Doctor* d;doctors){
+            delete d;
+        }
+    }
 };
 //illness type is vector where i  store all illness types ofcertain field
 int main(){
@@ -115,5 +120,4 @@ int main(){
     hospital.add_field(Illness_Types( {"Flu", "Fever", "Cough"},"Physician"));
     hospital.add_field(Illness_Types( {"Myopia", "Hyperopia", "Astigmatism"},"Ophthalmologist"));
     hospital.appointment(&patient);
-
 }
