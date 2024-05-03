@@ -103,7 +103,7 @@ public:
         std::cout<<"there are no doctors who can help you"<<std::endl;
     }
     ~Hospital(){
-        for(Doctor* d;doctors){
+        for(Doctor* d:doctors){
             delete d;
         }
     }
