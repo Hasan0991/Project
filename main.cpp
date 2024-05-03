@@ -29,7 +29,7 @@ public:
     str get_nationality(){return nationality;}
 };
 class Doctor{
-protected:
+public:
     str name;
     str field;
     str time_table;
@@ -71,7 +71,7 @@ public:
     }
     void recomenation(){
         for(Doctor* d: doctors){
-            if(d->)
+            if(d->field==)
         }
 
     }
