@@ -90,15 +90,17 @@ public:
         illnes_types.push_back(illness_type);
     }
     void appointment(Patient* patient){
+
         for(Doctor* D:doctors){
-            for(int i=0;i<illnes_types.size();i++) {
-                if(illnes_types[i].has_illness(patient->get_illness())==illnes_types[i].field)
+            for(Illness_Types types: illnes_types) {
+                if(types.has_illness(patient->get_illness()) && D->field==types.field){
+                    std::cout<<"yes there is a doctor "<<D->name<<std::endl;
+                    std::cout<<"He is specified in the field of"<<D->field<<std::endl;
+                    std::cout<<"time table"<<D->time_table<<std::endl;
+                }
             }
         }
-
+        std::cout<<"there are no doctors who can help you"<<std::endl;
     }
-
-
-
-
 };
+//illness type is vector where i  store all illness types ofcertain field
