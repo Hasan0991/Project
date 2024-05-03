@@ -37,6 +37,7 @@ public:
     Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
 
     virtual void treat() const = 0;
+    virtual ~Doctor(){}
 };
 class Surgery : public Doctor{
 public:
