@@ -90,13 +90,13 @@ public:
         illnes_types.push_back(illness_type);
     }
     void appointment(Patient* patient){
-
         for(Doctor* D:doctors){
             for(Illness_Types types: illnes_types) {
                 if(types.has_illness(patient->get_illness()) && D->field==types.field){
                     std::cout<<"yes there is a doctor "<<D->name<<std::endl;
                     std::cout<<"He is specified in the field of"<<D->field<<std::endl;
                     std::cout<<"time table"<<D->time_table<<std::endl;
+                    return;
                 }
             }
         }
@@ -104,3 +104,16 @@ public:
     }
 };
 //illness type is vector where i  store all illness types ofcertain field
+int main(){
+    Patient patient("ALI",123451,"Flu","azerbaijanian");
+    Hospital hospital;
+    hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
+    hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
+    hospital.add_doctor(new Ophthalmologist("MARTA","8:00 - 12:00 PM"));
+
+    hospital.add_field(Illness_Types( {"Appendicitis", "Fractures", "Cancer"},"Surgery"));
+    hospital.add_field(Illness_Types( {"Flu", "Fever", "Cough"},"Physician"));
+    hospital.add_field(Illness_Types( {"Myopia", "Hyperopia", "Astigmatism"},"Ophthalmologist"));
+    hospital.appointment(&patient);
+
+}
