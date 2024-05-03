@@ -29,6 +29,7 @@ public:
     str get_nationality(){return nationality;}
 };
 class Doctor{
+protected:
     str name;
     str field;
     str time_table;
@@ -68,7 +69,12 @@ public:
     void add_doctor(Doctor* doctor){
         doctors.push_back(doctor);
     }
+    void recomenation(){
+        for(Doctor* d: doctors){
+            if(d->)
+        }
 
+    }
 };
 
 
