@@ -61,4 +61,14 @@ public:
     }
 };
 
+class Hospital{
+private:
+    std::vector<Doctor*> doctors;
+public:
+    void add_doctor(Doctor* doctor){
+        doctors.push_back(doctor);
+    }
+
+};
+
 
