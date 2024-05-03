@@ -53,4 +53,12 @@ public:
     }
 };
 
+class Ophthalmologist: public Doctor{
+public:
+    Ophthalmologist(str name,str time_table): Doctor(name,"Physician", time_table) {}
+    void treat() const override{
+        std::cout<<"WEAR GLASSES "<<std::endl;
+    }
+};
+
 
