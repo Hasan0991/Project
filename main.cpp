@@ -63,9 +63,10 @@ public:
 };
 
 class Illness_Types{
+public:
     std::vector<str> illness_types;
     str field;
-public:
+
     Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
 
     bool has_illness(str illness){
@@ -91,7 +92,7 @@ public:
     void appointment(Patient* patient){
         for(Doctor* D:doctors){
             for(int i=0;i<illnes_types.size();i++) {
-                if(i)
+                if(illnes_types[i].has_illness(patient->get_illness())==illnes_types[i].field)
             }
         }
 
