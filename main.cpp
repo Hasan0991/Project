@@ -23,4 +23,10 @@ class Patient {
 public:
     Patient(str _name,int _id,str _illness,str _nationality) : name(_name),id(_id),illness_type(_illness),nationality(_nationality) {}
 
+    str get_illness(){return illness_type;}
+    str get_name(){return name;}
+    int get_id(){return id;}
+    str get_nationality(){return nationality;}
+
+
 };
