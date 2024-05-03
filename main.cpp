@@ -37,3 +37,10 @@ public:
 
     virtual void treat() const = 0;
 };
+class Surgery : public Doctor{
+public:
+    Surgery(str name,str time_table) : Doctor(name,"Surgery",time_table) {}
+
+};
+
+
