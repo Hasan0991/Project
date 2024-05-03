@@ -32,6 +32,7 @@ class Doctor{
 public:
     str name;
     str field;
+    str illness_care;
     str time_table;
 public:
     Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
@@ -62,19 +63,23 @@ public:
     }
 };
 
+//class Illness_Types{
+//    std::vector<str> illness_types;
+//    str field;
+//public:
+//    Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
+//
+//    void add_illness(str illness){
+//
+//    }
+//
+//};
+
 class Hospital{
-private:
     std::vector<Doctor*> doctors;
 public:
     void add_doctor(Doctor* doctor){
         doctors.push_back(doctor);
     }
-    void recomenation(){
-        for(Doctor* d: doctors){
-            if(d->field==)
-        }
 
-    }
 };
-
-
