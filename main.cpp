@@ -45,6 +45,7 @@ public:
     Surgery(str name,str time_table) : Doctor(name,"Surgery",time_table) {}
 
     void treat() const override{
+        std::cout<<"suggestion ->"<<std::endl;
         std::cout<<"Srgery works"<<std::endl;
     }
 };
@@ -52,6 +53,7 @@ class Physician: public Doctor{
 public:
     Physician(str name,str time_table): Doctor(name,"Physician", time_table) {}
     void treat() const override{
+        std::cout<<"suggestion ->"<<std::endl;
         std::cout<<"Physycian works"<<std::endl;
     }
 };
@@ -60,6 +62,7 @@ class Ophthalmologist: public Doctor{
 public:
     Ophthalmologist(str name,str time_table): Doctor(name,"Physician", time_table) {}
     void treat() const override{
+        std::cout<<"suggestion ->"<<std::endl;
         std::cout<<"WEAR GLASSES "<<std::endl;
     }
 };
@@ -99,6 +102,7 @@ public:
                     std::cout<<"yes there is a doctor "<<D->name<<std::endl;
                     std::cout<<"He is specified in the field of"<<D->field<<std::endl;
                     std::cout<<"time table"<<D->time_table<<std::endl;
+                    D->treat();
                     return true;
                 }
             }
@@ -126,7 +130,7 @@ TEST(HOSPITALTEST,UNSATISFIEDOUTPUT){
     Hospital hospital;
     hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
     hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
-    Patient patient("John Doe", 123456, "Flu", "English");
+    Patient patient("John Doe", 123456, "MALARIA", "English");
     EXPECT_FALSE(hospital.appointment(&patient));
 }
 int main(int argc, char **argv) {
