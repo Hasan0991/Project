@@ -60,7 +60,7 @@ public:
 
 class Ophthalmologist: public Doctor{
 public:
-    Ophthalmologist(str name,str time_table): Doctor(name,"Physician", time_table) {}
+    Ophthalmologist(str name,str time_table): Doctor(name,"Ophthalmologist", time_table) {}
     void treat() const override{
         std::cout<<"suggestion ->"<<std::endl;
         std::cout<<"WEAR GLASSES "<<std::endl;
@@ -95,7 +95,7 @@ public:
     void add_field(Illness_Types illness_type){
         illnes_types.push_back(illness_type);
     }
-    void appointment(Patient* patient){
+    bool appointment(Patient* patient){
         for(Doctor* D:doctors){
             for(Illness_Types types: illnes_types) {
                 if(types.has_illness(patient->get_illness()) && D->field==types.field){
@@ -103,11 +103,12 @@ public:
                     std::cout<<"He is specified in the field of"<<D->field<<std::endl;
                     std::cout<<"time table"<<D->time_table<<std::endl;
                     D->treat();
-                    return;
+                    return true;
                 }
             }
         }
         std::cout<<"there are no doctors who can help you"<<std::endl;
+        return false;
     }
     ~Hospital(){
         for(Doctor* d:doctors){
@@ -129,12 +130,12 @@ TEST(HOSPITALTEST,UNSATISFIEDOUTPUT){
     Hospital hospital;
     hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
     hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
-    Patient patient("John Doe", 123456, "MALARIA", "English");
-    EXPECT_FALSE(hospital.appointment(&patient));
+    Patient patient("John Doe", 123456, "Astigmatism", "English");
+    EXPECT_TRUE(hospital.appointment(&patient));
 }
 int main(int argc, char **argv) {
-//    testing::InitGoogleTest(&argc, argv);
-//    return RUN_ALL_TESTS();
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
     Patient patient("ALI",123451,"Astigmatism","azerbaijanian");
     Hospital hospital;
     hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
