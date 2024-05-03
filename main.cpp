@@ -107,6 +107,8 @@ public:
             delete d;
         }
     }
+    Hospital(const Hospital&)= delete;
+    Hospital &operator=(const Hospital&)= delete;
 };
 //illness type is vector where i  store all illness types ofcertain field
 int main(){
