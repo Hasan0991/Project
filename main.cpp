@@ -27,6 +27,13 @@ public:
     str get_name(){return name;}
     int get_id(){return id;}
     str get_nationality(){return nationality;}
+};
+class Doctor{
+    str name;
+    str field;
+    str time_table;
+public:
+    Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
 
-
+    virtual void treat() const = 0;
 };
