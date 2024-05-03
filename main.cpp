@@ -14,6 +14,7 @@
 #include<iostream>
 #include<vector>
 using str = std::string;
+#include<gtest/gtest.h>
 
 class Patient {
     str name;
@@ -57,7 +58,7 @@ public:
 
 class Ophthalmologist: public Doctor{
 public:
-    Ophthalmologist(str name,str time_table): Doctor(name,"Ophthalmologist", time_table) {}
+    Ophthalmologist(str name,str time_table): Doctor(name,"Physician", time_table) {}
     void treat() const override{
         std::cout<<"WEAR GLASSES "<<std::endl;
     }
@@ -79,7 +80,7 @@ public:
         return false;
     }
 };
-//so i have patient who has illness and in order to find appropriate doctot i need to create a function which will look through that illness in vector of illness
+//so i have patient who has illness and in order to find appropriate doctor i need to create a function which will look through that illness in vector of illness
 class Hospital{
     std::vector<Doctor*> doctors;
     std::vector<Illness_Types> illnes_types;
@@ -91,18 +92,19 @@ public:
     void add_field(Illness_Types illness_type){
         illnes_types.push_back(illness_type);
     }
-    void appointment(Patient* patient){
+    bool appointment(Patient* patient){
         for(Doctor* D:doctors){
             for(Illness_Types types: illnes_types) {
                 if(types.has_illness(patient->get_illness()) && D->field==types.field){
                     std::cout<<"yes there is a doctor "<<D->name<<std::endl;
                     std::cout<<"He is specified in the field of"<<D->field<<std::endl;
                     std::cout<<"time table"<<D->time_table<<std::endl;
-                    return;
+                    return true;
                 }
             }
         }
         std::cout<<"there are no doctors who can help you"<<std::endl;
+        return false;
     }
     ~Hospital(){
         for(Doctor* d:doctors){
@@ -112,8 +114,24 @@ public:
     Hospital(const Hospital&)= delete;
     Hospital &operator=(const Hospital&)= delete;
 };
-//illness type is vector where i  store all illness types ofcertain field
-int main(){
+//illness type is vector where i  store all illness types ofcertain field#include <gtest/gtest.h>
+TEST(HOSPITALTEST,SATISFIEDOUTPUT){
+    Hospital hospital;
+    hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
+    hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
+    Patient patient("John Doe", 123456, "Flu", "English");
+    EXPECT_TRUE(hospital.appointment(&patient));
+}
+TEST(HOSPITALTEST,UNSATISFIEDOUTPUT){
+    Hospital hospital;
+    hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
+    hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
+    Patient patient("John Doe", 123456, "Flu", "English");
+    EXPECT_FALSE(hospital.appointment(&patient));
+}
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
     Patient patient("ALI",123451,"Astigmatism","azerbaijanian");
     Hospital hospital;
     hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
