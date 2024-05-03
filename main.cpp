@@ -63,23 +63,23 @@ public:
     }
 };
 
-//class Illness_Types{
-//    std::vector<str> illness_types;
-//    str field;
-//public:
-//    Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
-//
-//    void add_illness(str illness){
-//
-//    }
-//
-//};
+class Illness_Types{
+    std::vector<str> illness_types;
+    str field;
+public:
+    Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
+};
 
 class Hospital{
     std::vector<Doctor*> doctors;
+    std::vector<Illness_Types> illnes_types;
 public:
     void add_doctor(Doctor* doctor){
         doctors.push_back(doctor);
     }
+    void add_field(Illness_Types illness_type){
+        illnes_types.push_back(illness_type);
+    }
+
 
 };
