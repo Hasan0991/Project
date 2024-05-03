@@ -20,5 +20,7 @@ class Patient {
     int id;
     str illness_type;
     str nationality;
+public:
+    Patient(str _name,int _id,str _illness,str _nationality) : name(_name),id(_id),illness_type(_illness),nationality(_nationality) {}
 
 };
