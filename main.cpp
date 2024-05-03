@@ -22,7 +22,14 @@ class Patient {
     str illness_type;
     str nationality;
 public:
-    Patient(str _name,int _id,str _illness,str _nationality) : name(_name),id(_id),illness_type(_illness),nationality(_nationality) {}
+    Patient(str _name,int _id,str _illness,str _nationality) : name(_name),illness_type(_illness),nationality(_nationality) {
+        if(_id<0){
+            throw std::invalid_argument("invalid data");
+        }
+        id = _id;
+
+
+    }
 
     str get_illness(){return illness_type;}
     str get_name(){return name;}
