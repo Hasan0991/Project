@@ -57,7 +57,7 @@ public:
 
 class Ophthalmologist: public Doctor{
 public:
-    Ophthalmologist(str name,str time_table): Doctor(name,"Physician", time_table) {}
+    Ophthalmologist(str name,str time_table): Doctor(name,"Ophthalmologist", time_table) {}
     void treat() const override{
         std::cout<<"WEAR GLASSES "<<std::endl;
     }
@@ -70,9 +70,9 @@ public:
 
     Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
 
-    bool has_illness(str illness){
-        for(int i=0;i<illness_types.size();i++){
-            if(illness_types[i]==illness){
+    bool has_illness(const str illness){
+        for(str type: illness_types){
+            if(type==illness){
                 return true;
             }
         }
@@ -84,6 +84,7 @@ class Hospital{
     std::vector<Doctor*> doctors;
     std::vector<Illness_Types> illnes_types;
 public:
+    Hospital(){}
     void add_doctor(Doctor* doctor){
         doctors.push_back(doctor);
     }
@@ -113,7 +114,7 @@ public:
 };
 //illness type is vector where i  store all illness types ofcertain field
 int main(){
-    Patient patient("ALI",123451,"Flu","azerbaijanian");
+    Patient patient("ALI",123451,"Astigmatism","azerbaijanian");
     Hospital hospital;
     hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
     hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
