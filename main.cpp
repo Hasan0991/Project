@@ -44,8 +44,13 @@ public:
     void treat() const override{
         std::cout<<"Srgery works"<<std::endl;
     }
-
-
+};
+class Physician: public Doctor{
+public:
+    Physician(str name,str time_table): Doctor(name,"Physician", time_table) {}
+    void treat() const override{
+        std::cout<<"Physycian works"<<std::endl;
+    }
 };
 
 
