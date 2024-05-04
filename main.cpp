@@ -1,16 +1,3 @@
-//i want to create same system as in hospitals.for instance,what you do when you
-//> come to hosputal.you come to reception and tell about your illness or type of
-//> illness.then they reccommend you the doctor who is specified in this field and
-//> tell you about his room number and time table.
-//> we can create class patient who has name id and illness and we can also have
-//> nationality so that respong will be in appropriate language .
-//> then we can have base class doctor which has name,specifieed field, and time
-//> table;
-//> and there will be other derived classes of doctor who will inherit the
-//> properties of base class and will have as a polymorpism different methods of
-//> treatment.we could have vector of doctors class which will store the name and
-//> specifed field and whatever illness is   program will recommend doctor and his
-//> time or will reject and tell that there is no doctors.
 #include<iostream>
 #include<vector>
 using str = std::string;
@@ -27,14 +14,12 @@ public:
             throw std::invalid_argument("invalid data");
         }
         id = _id;
-
-
     }
 
-    str get_illness(){return illness_type;}
-    str get_name(){return name;}
-    int get_id(){return id;}
-    str get_nationality(){return nationality;}
+    str get_illness()const{return illness_type;}
+    str get_name()const{return name;}
+    int get_id() const{return id;}
+    str get_nationality()const{return nationality;}
 };
 class Doctor{
 public:
@@ -81,7 +66,7 @@ public:
 
     Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
 
-    bool has_illness(const str illness){
+    bool has_illness(const str illness)const{
         for(str type: illness_types){
             if(type==illness){
                 return true;
@@ -95,20 +80,20 @@ class Hospital{
     std::vector<Doctor*> doctors;
     std::vector<Illness_Types> illnes_types;
 public:
-    Hospital(){}
+    Hospital()= default;
     void add_doctor(Doctor* doctor){
         doctors.push_back(doctor);
     }
-    void add_field(Illness_Types illness_type){
+    void add_field(const Illness_Types& illness_type){
         illnes_types.push_back(illness_type);
     }
     bool appointment(Patient* patient){
         for(Doctor* D:doctors){
-            for(Illness_Types types: illnes_types) {
+            for(const Illness_Types& types: illnes_types) {
                 if(types.has_illness(patient->get_illness()) && D->field==types.field){
-                    std::cout<<"yes there is a doctor "<<D->name<<std::endl;
-                    std::cout<<"He is specified in the field of"<<D->field<<std::endl;
-                    std::cout<<"time table"<<D->time_table<<std::endl;
+                    std::cout<<"yes there is a doctor  "<<D->name<<std::endl;
+                    std::cout<<"He is specified in the field of  "<<D->field<<std::endl;
+                    std::cout<<"time table  "<<D->time_table<<std::endl;
                     D->treat();
                     return true;
                 }
@@ -138,7 +123,7 @@ TEST(HOSPITALTEST,UNSATISFIEDOUTPUT){
     hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
     hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
     Patient patient("John Doe", 123456, "Astigmatism", "English");
-    EXPECT_TRUE(hospital.appointment(&patient));
+    EXPECT_FALSE(hospital.appointment(&patient));
 }
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
