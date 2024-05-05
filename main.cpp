@@ -21,43 +21,6 @@ public:
     int get_id() const{return id;}
     str get_nationality()const{return nationality;}
 };
-class Doctor{
-public:
-    str name;
-    str field;
-    str time_table;
-public:
-    Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
-
-    virtual void treat() const = 0;
-    virtual ~Doctor(){}
-};
-class Surgery : public Doctor{
-public:
-    Surgery(str name,str time_table) : Doctor(name,"Surgery",time_table) {}
-
-    void treat() const override{
-        std::cout<<"suggestion ->"<<std::endl;
-        std::cout<<"Srgery works"<<std::endl;
-    }
-};
-class Physician: public Doctor{
-public:
-    Physician(str name,str time_table): Doctor(name,"Physician", time_table) {}
-    void treat() const override{
-        std::cout<<"suggestion ->"<<std::endl;
-        std::cout<<"Physycian works"<<std::endl;
-    }
-};
-
-class Ophthalmologist: public Doctor{
-public:
-    Ophthalmologist(str name,str time_table): Doctor(name,"Ophthalmologist", time_table) {}
-    void treat() const override{
-        std::cout<<"suggestion ->"<<std::endl;
-        std::cout<<"WEAR GLASSES "<<std::endl;
-    }
-};
 
 class Illness_Types{
 public:
@@ -66,15 +29,69 @@ public:
 
     Illness_Types(std::vector<str> _illnes_types,str _field) : illness_types(_illnes_types),field(_field) {}
 
-    bool has_illness(const str illness)const{
-        for(str type: illness_types){
+    Illness_Types() {}
+
+    bool has_illness(const str& illness)const{
+        for(const str& type: illness_types){
             if(type==illness){
                 return true;
             }
         }
         return false;
     }
+
 };
+class Prescription {
+public:
+    void add_pill(const str& new_pill){
+        med_pill.push_back(new_pill);
+    }
+
+    std::vector<str> med_pill;
+};
+class Doctor{
+public:
+    str name;
+    str field;
+    str time_table;
+public:
+    Doctor(str _name,str _field,str _time_table) : name(_name),field(_field),time_table(_time_table)  {}
+
+    virtual Prescription treat() const = 0;
+    virtual ~Doctor()= default;
+};
+
+class Surgery : public Doctor{
+public:
+    Surgery(str name,str time_table) : Doctor(name,"Surgery",time_table) {}
+
+    Prescription treat() const override{
+        Prescription prescription;
+        prescription.add_pill("painkillers");
+        return prescription;
+    }
+};
+class Physician: public Doctor{
+public:
+    Physician(str name,str time_table): Doctor(name,"Physician", time_table) {}
+    Prescription treat() const override{
+        Prescription prescription;
+        prescription.add_pill("antibiotics");
+        return prescription;
+    }
+};
+
+class Ophthalmologist: public Doctor{
+public:
+    Ophthalmologist(str name,str time_table): Doctor(name,"Ophthalmologist", time_table) {}
+    Prescription treat() const override{
+        Prescription prescription;
+        prescription.add_pill("eye drops");
+        return prescription;
+    }
+};
+
+
 //so i have patient who has illness and in order to find appropriate doctor i need to create a function which will look through that illness in vector of illness
 class Hospital{
     std::vector<Doctor*> doctors;
@@ -87,20 +104,29 @@ public:
     void add_field(const Illness_Types& illness_type){
         illnes_types.push_back(illness_type);
     }
-    bool appointment(Patient* patient){
+    Prescription appointment(Patient* patient){
+        Prescription prescription;
         for(Doctor* D:doctors){
-            for(const Illness_Types& types: illnes_types) {
+            for(const auto& types: illnes_types) {
                 if(types.has_illness(patient->get_illness()) && D->field==types.field){
                     std::cout<<"yes there is a doctor  "<<D->name<<std::endl;
                     std::cout<<"He is specified in the field of  "<<D->field<<std::endl;
                     std::cout<<"time table  "<<D->time_table<<std::endl;
-                    D->treat();
-                    return true;
+                    Prescription doctor_prescription = D->treat();
+                    std::cout << "Prescribed Medication: ";
+                    for(const auto& pill: doctor_prescription.med_pill){
+                        prescription.add_pill(pill);
+                    }
+                    for(const auto& pill: doctor_prescription.med_pill){
+                        std::cout<<pill<<std::endl;
+                    }
+
                 }
+
             }
         }
+        return prescription;
         std::cout<<"there are no doctors who can help you"<<std::endl;
-        return false;
     }
     ~Hospital(){
         for(Doctor* d:doctors){
@@ -110,25 +136,66 @@ public:
     Hospital(const Hospital&)= delete;
     Hospital &operator=(const Hospital&)= delete;
 };
-//illness type is vector where i  store all illness types ofcertain field#include <gtest/gtest.h>
+// i have vector of medical pills i need to get for the outpur which pills must patient take
+//illness type is vector where i  store all illness types ofcertain field#include
+TEST(SURGERYPRESCTRIPTIONTEST,SATISFIEDOUTPUT){
+    Surgery surgery("HASAN","18:00 - 19:00");
+    Prescription prescription = surgery.treat();
+    EXPECT_EQ(prescription.med_pill[0],"painkillers");
+}
+TEST(PHYSICANPRESCTRIPTIONTEST,SATISFIEDOUTPUT){
+    Physician physician("HASAN","18:00 - 19:00");
+    Prescription prescription = physician.treat();
+    EXPECT_EQ(prescription.med_pill[0],"antibiotics");
+}
+TEST(OphthalmologistPRESCTRIPTIONTEST,SATISFIEDOUTPUT){
+    Ophthalmologist ophthalmologist("HASAN","18:00 - 19:00");
+    Prescription prescription = ophthalmologist.treat();
+    EXPECT_EQ(prescription.med_pill[0],"eye drops");
+}
 TEST(HOSPITALTEST,SATISFIEDOUTPUT){
+    Patient patient("ALI",123451,"Cancer","azerbaijanian");
     Hospital hospital;
-    hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
-    hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
-    Patient patient("John Doe", 123456, "Flu", "English");
-    EXPECT_TRUE(hospital.appointment(&patient));
+    hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
+    hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
+    hospital.add_doctor(new Ophthalmologist("MARTA","8:00 - 12:00 PM"));
+
+    hospital.add_field(Illness_Types( {"Appendicitis", "Fractures", "Cancer"},"Surgery"));
+    hospital.add_field(Illness_Types( {"Flu", "Fever", "Cough"},"Physician"));
+    hospital.add_field(Illness_Types( {"Myopia", "Hyperopia", "Astigmatism"},"Ophthalmologist"));
+    Prescription prescription =hospital.appointment(&patient);
+    EXPECT_EQ(prescription.med_pill[0],"painkillers");
 }
-TEST(HOSPITALTEST,UNSATISFIEDOUTPUT){
+TEST(HOSPITALTEST,SATISFIEDOUTPUTFORPHYSICIAN){
+    Patient patient("ALI",123451,"Flu","azerbaijanian");
     Hospital hospital;
-    hospital.add_doctor(new Physician("Dr. Smith", "9:00 - 17:00"));
-    hospital.add_field(Illness_Types({"Flu", "Fever", "Cough"}, "Physician"));
-    Patient patient("John Doe", 123456, "Astigmatism", "English");
-    EXPECT_FALSE(hospital.appointment(&patient));
+    hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
+    hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
+    hospital.add_doctor(new Ophthalmologist("MARTA","8:00 - 12:00 PM"));
+
+    hospital.add_field(Illness_Types( {"Appendicitis", "Fractures", "Cancer"},"Surgery"));
+    hospital.add_field(Illness_Types( {"Flu", "Fever", "Cough"},"Physician"));
+    hospital.add_field(Illness_Types( {"Myopia", "Hyperopia", "Astigmatism"},"Ophthalmologist"));
+    Prescription prescription =hospital.appointment(&patient);
+    EXPECT_EQ(prescription.med_pill[0],"antibiotics");
 }
-int main(int argc, char **argv) {
+TEST(HOSPITALTEST,SATISFIEDOUTPUTFORPOPHTALMOLOGIST){
+    Patient patient("ALI",123451,"Hyperopia","azerbaijanian");
+    Hospital hospital;
+    hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
+    hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
+    hospital.add_doctor(new Ophthalmologist("MARTA","8:00 - 12:00 PM"));
+
+    hospital.add_field(Illness_Types( {"Appendicitis", "Fractures", "Cancer"},"Surgery"));
+    hospital.add_field(Illness_Types( {"Flu", "Fever", "Cough"},"Physician"));
+    hospital.add_field(Illness_Types( {"Myopia", "Hyperopia", "Astigmatism"},"Ophthalmologist"));
+    Prescription prescription =hospital.appointment(&patient);
+    EXPECT_EQ(prescription.med_pill[0],"eye drops");
+}
+int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-    Patient patient("ALI",123451,"Astigmatism","azerbaijanian");
+    Patient patient("ALI",123451,"Fever","azerbaijanian");
     Hospital hospital;
     hospital.add_doctor(new Surgery("HASAN","10:00 - 15:00 PM"));
     hospital.add_doctor(new Physician("JOHN","15:30 - 18:00 PM"));
